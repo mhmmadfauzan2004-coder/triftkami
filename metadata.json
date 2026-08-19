@@ -1,0 +1,6 @@
+{
+  "name": "KICKS VAULT - Curated Secondhand Sneaker Store",
+  "description": "Platform toko sepatu second premium dan streetwear preloved dengan katalog dinamis, integrasi WhatsApp otomatis, dan dashboard admin.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
