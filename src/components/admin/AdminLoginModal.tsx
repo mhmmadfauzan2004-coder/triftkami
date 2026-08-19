@@ -25,8 +25,16 @@ export const AdminLoginModal: React.FC<AdminLoginModalProps> = ({
     setError(null);
     setLoading(true);
 
+    const cleanUsername = username.trim();
+    const cleanPassword = password.trim();
+
+    if (!cleanUsername || !cleanPassword) {
+      setError("Silakan isi username dan password");
+      return;
+    }
+
     try {
-      const res = await api.login(username, password);
+      const res = await api.login(cleanUsername, cleanPassword);
       onLoginSuccess(res.token, res.username);
       onClose();
     } catch (err: any) {
@@ -44,6 +52,7 @@ export const AdminLoginModal: React.FC<AdminLoginModalProps> = ({
       >
         {/* Close Button */}
         <button
+          type="button"
           onClick={onClose}
           className="absolute top-4 right-4 p-1.5 rounded-lg text-stone-400 hover:text-white hover:bg-stone-800 transition-colors cursor-pointer"
         >
@@ -72,7 +81,7 @@ export const AdminLoginModal: React.FC<AdminLoginModalProps> = ({
         )}
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form noValidate onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1.5">
             <label className="text-xs font-mono font-medium text-stone-300">
               Username Admin
@@ -81,7 +90,9 @@ export const AdminLoginModal: React.FC<AdminLoginModalProps> = ({
               <User className="w-4 h-4 text-stone-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
-                required
+                autoComplete="username"
+                autoCapitalize="none"
+                autoCorrect="off"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="admin"
@@ -98,7 +109,7 @@ export const AdminLoginModal: React.FC<AdminLoginModalProps> = ({
               <Lock className="w-4 h-4 text-stone-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type="password"
-                required
+                autoComplete="current-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Masukkan password admin"

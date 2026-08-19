@@ -17,12 +17,21 @@ export const AdminSecurity: React.FC<AdminSecurityProps> = ({ token }) => {
     e.preventDefault();
     setStatusMsg(null);
 
-    if (newPassword !== confirmPassword) {
+    const curr = currentPassword.trim();
+    const next = newPassword.trim();
+    const conf = confirmPassword.trim();
+
+    if (!curr) {
+      setStatusMsg({ text: "Silakan masukkan password saat ini.", type: "error" });
+      return;
+    }
+
+    if (next !== conf) {
       setStatusMsg({ text: "Konfirmasi password baru tidak cocok.", type: "error" });
       return;
     }
 
-    if (newPassword.length < 5) {
+    if (next.length < 5) {
       setStatusMsg({ text: "Password baru minimal 5 karakter.", type: "error" });
       return;
     }
@@ -30,7 +39,7 @@ export const AdminSecurity: React.FC<AdminSecurityProps> = ({ token }) => {
     setLoading(true);
 
     try {
-      await api.changePassword(currentPassword, newPassword, token);
+      await api.changePassword(curr, next, token);
       setStatusMsg({ text: "Password admin berhasil diperbarui!", type: "success" });
       setCurrentPassword("");
       setNewPassword("");
@@ -70,16 +79,15 @@ export const AdminSecurity: React.FC<AdminSecurityProps> = ({ token }) => {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="p-6 rounded-2xl bg-stone-900/90 border border-stone-800 space-y-4">
+      <form noValidate onSubmit={handleSubmit} className="p-6 rounded-2xl bg-stone-900/90 border border-stone-800 space-y-4">
         <div className="space-y-1.5">
           <label className="text-xs font-mono font-medium text-stone-300">
-            Password Saat Ini *
+            Password Saat Ini
           </label>
           <div className="relative">
             <Lock className="w-4 h-4 text-stone-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="password"
-              required
               value={currentPassword}
               onChange={(e) => setCurrentPassword(e.target.value)}
               placeholder="Masukkan password saat ini (default: admin123)"
@@ -90,13 +98,12 @@ export const AdminSecurity: React.FC<AdminSecurityProps> = ({ token }) => {
 
         <div className="space-y-1.5">
           <label className="text-xs font-mono font-medium text-stone-300">
-            Password Baru *
+            Password Baru
           </label>
           <div className="relative">
             <KeyRound className="w-4 h-4 text-stone-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="password"
-              required
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
               placeholder="Minimal 5 karakter"
@@ -107,13 +114,12 @@ export const AdminSecurity: React.FC<AdminSecurityProps> = ({ token }) => {
 
         <div className="space-y-1.5">
           <label className="text-xs font-mono font-medium text-stone-300">
-            Konfirmasi Password Baru *
+            Konfirmasi Password Baru
           </label>
           <div className="relative">
             <KeyRound className="w-4 h-4 text-stone-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="password"
-              required
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="Ulangi password baru"
